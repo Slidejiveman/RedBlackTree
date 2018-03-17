@@ -1,11 +1,19 @@
+package tree;
+
+import strategy.InOrderTraversalStrategy;
+import strategy.PostOrderTraversalStrategy;
+import strategy.PreOrderTraversalStrategy;
+import strategy.TraversalStrategy;
+
 import java.util.Scanner;
 
 public class RedBlackTree {
 
     private RedBlackTreeNode root;
     private final RedBlackTreeNode nullNode = new RedBlackTreeNode(-1);
+    TraversalStrategy traversalStrategy;
 
-    RedBlackTree() {
+    public RedBlackTree() {
         root = nullNode;
         root.setLeft(nullNode);
         root.setRight(nullNode);
@@ -87,7 +95,7 @@ public class RedBlackTree {
         root.setColor(RedBlackTreeColorEnum.BLACK);
     }
 
-    void rotateLeft(RedBlackTreeNode n) {
+    private void rotateLeft(RedBlackTreeNode n) {
         if (n.getParent() != nullNode) {
             if (n == n.getParent().getLeft()) {
                 n.getParent().setLeft(n.getRight());
@@ -113,7 +121,7 @@ public class RedBlackTree {
         }
     }
 
-    void rotateRight(RedBlackTreeNode n) {
+    private void rotateRight(RedBlackTreeNode n) {
         if (n.getParent() != nullNode) {
             if (n == n.getParent().getLeft()) {
                 n.getParent().setLeft(n.getLeft());
@@ -155,11 +163,11 @@ public class RedBlackTree {
         return nullNode;
     }
 
-    void deleteTree() {
+    private void deleteTree() {
         root = nullNode;
     }
 
-    void transplant (RedBlackTreeNode target, RedBlackTreeNode with) {
+    private void transplant (RedBlackTreeNode target, RedBlackTreeNode with) {
         if (target.getParent() == nullNode) {
             root = with;
         } else if (target == target.getParent().getLeft()) {
@@ -170,7 +178,7 @@ public class RedBlackTree {
         with.setParent(target.getParent());
     }
 
-    boolean delete(RedBlackTreeNode target) {
+    private boolean delete(RedBlackTreeNode target) {
         if ((target = find(target, root)) == nullNode) {
             return false;
         }
@@ -206,7 +214,7 @@ public class RedBlackTree {
         return true;
     }
 
-    void deleteFixup(RedBlackTreeNode n) {
+    private void deleteFixup(RedBlackTreeNode n) {
         while (n != root && n.getColor() != RedBlackTreeColorEnum.BLACK) {
             if (n == n.getParent().getLeft()) {
                 RedBlackTreeNode temp = n.getParent().getRight();
@@ -265,24 +273,22 @@ public class RedBlackTree {
         n.setColor(RedBlackTreeColorEnum.BLACK);
     }
 
-    RedBlackTreeNode treeMinimum(RedBlackTreeNode subTreeRoot) {
+    private RedBlackTreeNode treeMinimum(RedBlackTreeNode subTreeRoot) {
         while (subTreeRoot.getLeft() != nullNode) {
             subTreeRoot = subTreeRoot.getLeft();
         }
         return subTreeRoot;
     }
 
-    void printTree(RedBlackTreeNode n) {
-        if (n == nullNode) {
-            return;
-        }
-        printTree(n.getLeft());
-        System.out.print(((n.getColor() == RedBlackTreeColorEnum.RED) ? "Color: Red" : "Color: Black") +
-        "Key: " + n.getElement() + " Parent: " + n.getParent().getElement() + "\n");
-        printTree(n.getRight());
+    public TraversalStrategy getTraversalStrategy() {
+        return traversalStrategy;
     }
 
-    public void consoleUI() {
+    public void setTraversalStrategy(TraversalStrategy traversalStrategy) {
+        this.traversalStrategy = traversalStrategy;
+    }
+
+    private void consoleUI() {
         Scanner scan = new Scanner(System.in);
         while (true) {
             System.out.println("\n1.- Add items\n"
@@ -302,7 +308,17 @@ public class RedBlackTree {
                         insert(node);
                         item = scan.nextInt();
                     }
-                    printTree(root);
+                    // start with in order, then print all three strategies.
+                    // return to in order so it is ready for the next run
+                    System.out.println("In Order Strategy.");
+                    traversalStrategy.execute(root, nullNode);
+                    System.out.println("\nPre Order Strategy.");
+                    setTraversalStrategy(new PreOrderTraversalStrategy());
+                    traversalStrategy.execute(root, nullNode);
+                    System.out.println("\nPost Order Strategy.");
+                    setTraversalStrategy(new PostOrderTraversalStrategy());
+                    traversalStrategy.execute(root, nullNode);
+                    setTraversalStrategy(new InOrderTraversalStrategy());
                     break;
                 case 2:
                     item = scan.nextInt();
@@ -317,7 +333,7 @@ public class RedBlackTree {
                         item = scan.nextInt();
                     }
                     System.out.println();
-                    printTree(root);
+                    traversalStrategy.execute(root, nullNode);
                     break;
                 case 3:
                     item = scan.nextInt();
@@ -328,7 +344,7 @@ public class RedBlackTree {
                     }
                     break;
                 case 4:
-                    printTree(root);
+                    traversalStrategy.execute(root, nullNode);
                     break;
                 case 5:
                     deleteTree();
@@ -340,10 +356,11 @@ public class RedBlackTree {
 
     public static void main(String[] args) {
         RedBlackTree rbt = new RedBlackTree();
+        rbt.setTraversalStrategy(new InOrderTraversalStrategy());
         rbt.consoleUI();
     }
 
-    private class RedBlackTreeNode {
+    public class RedBlackTreeNode {
 
         private int element;
         private RedBlackTreeNode left;

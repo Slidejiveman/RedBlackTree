@@ -1,0 +1,5 @@
+https://www.java-tips.org/java-se-tips-100019/24-java-lang/1904-red-black-tree-implementation-in-java.html
+A general refresher on Red-Black trees and how they could be implemented in Java.
+
+http://www.codebytes.in/2014/10/red-black-tree-java-implementation.html
+same

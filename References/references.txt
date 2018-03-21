@@ -1,5 +1,8 @@
 https://www.java-tips.org/java-se-tips-100019/24-java-lang/1904-red-black-tree-implementation-in-java.html
-A general refresher on Red-Black trees and how they could be implemented in Java.
+1. A general refresher on Red-Black trees and how they could be implemented in Java.
 
 http://www.codebytes.in/2014/10/red-black-tree-java-implementation.html
-same
+2. A general refresher on Red-Black trees that demonstrates the nullNode idea.
+
+https://en.wikipedia.org/wiki/Red%E2%80%93black_tree#Properties
+3. General information about the properties of Red-Black Trees

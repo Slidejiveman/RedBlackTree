@@ -3,6 +3,10 @@ package strategy;
 import tree.RedBlackTree;
 import tree.RedBlackTreeColorEnum;
 
+/**
+ * This class recursively performs a in-order tree traversal.
+ * It is a concrete strategy of tree traversal.
+ */
 public class InOrderTraversalStrategy implements TraversalStrategy {
 
     public InOrderTraversalStrategy() { }
